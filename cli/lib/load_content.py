@@ -1,22 +1,18 @@
 import json
-from pathlib import Path
+import os
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+DATA_PATH = os.path.join(PROJECT_ROOT, "data", "movies.json")
+STOPWORDS_PATH = os.path.join(PROJECT_ROOT, "data", "stopwords.txt")
+CACHE_DIR = os.path.join(PROJECT_ROOT, "cache")
 
 
-def load_content() -> list[str]:
-    curr_dir = Path(__file__).parent
-    movies_path = curr_dir / "../../data/movies.json"
-    content = []
-
-    with open(movies_path) as f:
+def load_content() -> list[dict]:
+    with open(DATA_PATH) as f:
         content = json.load(f)
     return content["movies"]
 
 
 def load_stopwords() -> list[str]:
-    curr_dir = Path(__file__).parent
-    movies_path = curr_dir / "../../data/stopwords.txt"
-    content = []
-
-    with open(movies_path, "r") as f:
-        content = f.read().splitlines()
-    return content
+    with open(STOPWORDS_PATH, "r") as f:
+        return f.read().splitlines()
