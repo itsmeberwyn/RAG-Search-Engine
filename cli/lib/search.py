@@ -1,17 +1,22 @@
 from .common import tokens
+from .index import InvertedIndex
 
 
-def search(query: str, movies: list[dict], limit: int = 5) -> list[dict]:
+def search(query: str, limit: int = 5) -> list[dict]:
     results = []
-    for movie in movies:
-        title = movie["title"]
-        search_query = query
+    seen = set()
+    index = InvertedIndex()
+    index.load()
 
-        title_tokens = tokens(title)
-        query_tokens = tokens(search_query)
-
-        for query_token in query_tokens:
-            for title_token in title_tokens:
-                if query_token in title_token and len(results) < limit:
-                    results.append(movie)
+    query_tokens = tokens(query)
+    for query in query_tokens:
+        index_results = index.get_documents(query)
+        for index_result in index_results:
+            if index_result in seen:
+                continue
+            seen.add(index_result)
+            search_result = index.docmap[index_result]
+            results.append(search_result)
+            if len(results) >= limit:
+                return results
     return results

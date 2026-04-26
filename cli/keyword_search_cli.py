@@ -1,8 +1,7 @@
 import argparse
 
 from lib.common import format_search_result
-from lib.index import InvertedIndex
-from lib.load_content import load_content
+from lib.index import build_indexes
 from lib.search import search
 
 
@@ -19,15 +18,10 @@ def main() -> None:
 
     match args.command:
         case "search":
-            movies = load_content()
-            results = search(args.query, movies)
+            results = search(args.query)
             format_search_result(results)
         case "build":
-            index = InvertedIndex()
-            index.build()
-            index.save()
-            docs = index.get_documents("merida")
-            print(docs)
+            build_indexes()
         case _:
             parser.print_help()
 
