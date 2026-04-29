@@ -17,7 +17,7 @@ def tokenize_text(text: str) -> list[str]:
 
 def remove_stopwords(tokens: list[str]) -> list[str]:
     stopwords = load_stopwords()
-    set_tokens = set(tokens)
+    set_tokens = tokens
     return [token for token in set_tokens if token not in stopwords]
 
 
